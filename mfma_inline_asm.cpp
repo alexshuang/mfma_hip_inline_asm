@@ -57,7 +57,7 @@ __global__ void matrix_fp32(float* out, float* in, const int width) {
     mfma_float4 in_C,out_D;
     float in_A, in_B;
 
-#ifdef __HIP_ARCH_GFX908__
+#if __GPU_TARGET__ == 908
     out_D = __llvm_amdgcn_mfma_f32_16x16x4f32(in_A, in_B,in_C,0,0,0 );
     out[x*width+y] = *(float*)&out_D;
 #else
@@ -72,7 +72,7 @@ __global__ void matrix_fp16(float* out, float* in, const int width) {
     float16 in_C,out_D;
     half4 in_A, in_B;
 
-#ifdef __HIP_ARCH_GFX908__
+#if defined __MFMA__ && __MFMA__ == 1
     out_D = __llvm_amdgcn_mfma_f32_32x32x8f16(in_A, in_B,in_C,0,0,0 );
     out[x*width+y] = *(float*)&out_D;
 #else

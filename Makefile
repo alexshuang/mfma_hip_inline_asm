@@ -16,7 +16,8 @@ EXECUTABLE=./mfma_inline_asm
 
 all: $(EXECUTABLE) test
 
-CXXFLAGS =-g
+CXXFLAGS =-g  -D__MFMA__=0 -D__GPU_TARGET__=906
+
 CXX=$(HIPCC)
 
 .PHONY: test
