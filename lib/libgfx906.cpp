@@ -13,7 +13,7 @@ __global__ void matrix_fp32(float* out, float* in, const int width) {
     mfma_float4 in_C,out_D;
     float in_A, in_B;
 
-	printf("matrix_fp32 enter.\n");
+	printf("%s: matrix_fp32 enter.\n", __FILE__);
 }
 
 __global__ void matrix_fp16(float* out, float* in, const int width) {
@@ -23,5 +23,5 @@ __global__ void matrix_fp16(float* out, float* in, const int width) {
     float16 in_C,out_D;
     half4 in_A, in_B;
 
-	printf("matrix_fp16 enter.\n");
+	printf("%s: matrix_fp32 enter.\n", __FILE__);
 }

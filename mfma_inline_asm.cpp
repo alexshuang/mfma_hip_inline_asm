@@ -24,8 +24,10 @@ THE SOFTWARE.
 #include "hip/hip_runtime.h"
 
 // hip header file
+#ifdef __HIP_DEVICE_COMPILE__
 extern void matrix_fp16(float* out, float* in, const int width);
 extern void matrix_fp32(float* out, float* in, const int width);
+#endif
 
 #define WIDTH 1024
 
@@ -81,17 +83,21 @@ int main() {
 
     printf("hipMemcpyHostToDevice time taken  = %6.3fms\n", eventMs);
     // pre-run
+#ifdef __HIP_DEVICE_COMPILE__
     hipLaunchKernelGGL(matrix_fp16, dim3(WIDTH / THREADS_PER_BLOCK_X, WIDTH / THREADS_PER_BLOCK_Y),
                     dim3(THREADS_PER_BLOCK_X, THREADS_PER_BLOCK_Y), 0, 0, gpuTransposeMatrix,
                     gpuMatrix, WIDTH);
+#endif
 
     // Record the start event
     hipEventRecord(start, NULL);
 
     // Lauching kernel from host
+#ifdef __HIP_DEVICE_COMPILE__
     hipLaunchKernelGGL(matrix_fp16, dim3(WIDTH / THREADS_PER_BLOCK_X, WIDTH / THREADS_PER_BLOCK_Y),
                     dim3(THREADS_PER_BLOCK_X, THREADS_PER_BLOCK_Y), 0, 0, gpuTransposeMatrix,
                     gpuMatrix, WIDTH);
+#endif
 
     // Record the stop event
     hipEventRecord(stop, NULL);
@@ -105,9 +111,11 @@ int main() {
     hipEventRecord(start, NULL);
 
     // Lauching kernel from host
+#ifdef __HIP_DEVICE_COMPILE__
     hipLaunchKernelGGL(matrix_fp32, dim3(WIDTH / THREADS_PER_BLOCK_X, WIDTH / THREADS_PER_BLOCK_Y),
                     dim3(THREADS_PER_BLOCK_X, THREADS_PER_BLOCK_Y), 0, 0, gpuTransposeMatrix,
                     gpuMatrix, WIDTH);
+#endif
 
     // Record the stop event
     hipEventRecord(stop, NULL);
